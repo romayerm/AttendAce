@@ -1,4 +1,4 @@
-package com.attendace.attendace;
+package com.attendace.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.Objects;

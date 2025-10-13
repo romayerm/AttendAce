@@ -25,3 +25,8 @@ To help educators ensure no student is left behind.
 ---
 ## Status
 This project is a **work in progress.**
+
+---
+##  Links of Interest
+Trello Project Management Board: https://trello.com/invite/b/68c0cf9ce44f36e660c95d11/ATTI412feca52f55943ff348c27a29c7854f04E159FE/attendace
+Timelog: https://docs.google.com/spreadsheets/d/12WevBprF5Eb1INaRFW8gjZ824NsHFTLE7EvZjqZm1ik/edit?usp=sharing

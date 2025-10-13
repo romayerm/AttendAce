@@ -20,13 +20,13 @@ public class StudentDAOImpl implements StudentDAO {
     }
 
     @Override
-    public void getStudentByID(int studentId) {
-        //
+    public Student getStudentByID(int studentId) {
+        return null;
     }
 
     @Override
-    public void getAllStudents() {
-        //
+    public List<Student> getAllStudents() {
+        return null;
     }
 
     @Override

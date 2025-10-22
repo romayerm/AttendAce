@@ -17,7 +17,13 @@ public class AttendanceDAOImpl {
 
     @Override
     public void addAttendance(Attendance attendance) {
-        //
+        String sql = "INSERT INTO Attendance (SessionDate, CourseID, StudentID, AStatus) VALUES (?, ?, ?, ?)";
+        jdbcTemplate.update(sql,
+            attendance.getSessionDate(),
+            attendance.getCourseId(),
+            attendance.getStudentId(),
+            attendance.getAStatus()
+        );
     }
 
     @Override

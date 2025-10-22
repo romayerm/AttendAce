@@ -16,7 +16,13 @@ public class StudentDAOImpl implements StudentDAO {
 
     @Override
     public void addStudent(Student student) {
-        //
+        String sql = "INSERT INTO Student (EMPLID, StudentFName, StudentLName, StudentEmail) VALUES (?, ?, ?, ?)"; //SQL statement that inserts one new row into the Student table
+        jdbcTemplate.update(sql,                                                                                   //Executes the command to fill the placehholders in the newly inserted row
+            student.getEmplid(),
+            student.getStudentFName(),
+            student.getStudentLName(),
+            student.getStudentEmail()
+        );
     }
 
     @Override
@@ -31,12 +37,20 @@ public class StudentDAOImpl implements StudentDAO {
 
     @Override
     public void updateStudent(Student student) {
-        //
+        String sql = "UPDATE Student SET EMPLID = ?, StudentFName = ?, StudentLName = ?, StudentEmail = ? WHERE StudentID = ?";
+        jdbcTemplate.update(sql,
+            student.getEmplid(),
+            student.getStudentFName(),
+            student.getStudentLName(),
+            student.getStudentEmail(),
+            student.getStudentId()
+        );
     }
 
     @Override
     public void deleteStudent(int studentId) {
-        //
+        String sql = "DELETE FROM Student WHERE StudentID = ?";
+        jdbcTemplate.update(sql, studentId);
     }
     
 }

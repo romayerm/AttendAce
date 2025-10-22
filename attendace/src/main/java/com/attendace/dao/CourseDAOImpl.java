@@ -17,7 +17,11 @@ public class CourseDAOImpl {
 
     @Override
     public void addCourse(Course course) {
-        //
+        String sql = "INSERT INTO Course (CourseCode, CourseName) VALUES (?, ?)";
+        jdbcTemplate.update(sql,
+            course.getCourseCode(),
+            course.getCourseName()
+        );
     }
 
     @Override

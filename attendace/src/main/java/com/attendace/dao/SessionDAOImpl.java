@@ -17,7 +17,11 @@ public class SessionDAOImpl {
 
     @Override
     public void addSession(Session session) {
-        //
+        String sql = "INSERT INTO Session (SessionDate, CourseID) VALUES (?, ?)";
+        jdbcTemplate.update(sql,
+            session.getSessionDate(),
+            session.getCourseId()
+        );
     }
 
     @Override

@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class AttendanceDAOImpl {
+public class AttendanceDAOImpl implements AttendanceDAO {
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -27,19 +27,26 @@ public class AttendanceDAOImpl {
     }
 
     @Override
-    public Attendance getAttendanceById(int sessionId, int studentId) { return null; }
+    public Attendance getAttendanceById(String sessionDate, int courseId, int studentId) { return null; }
 
     @Override
     public List<Attendance> getAllAttendance() { return null; }
 
     @Override
-    public void updateAttendance(Attendance attendance) {
-        //
+    public void updateAttendance(Attendance attendance, String oldSessionDate, int oldCourseId, int oldStudentId) {
+        String sql = "UPDATE Attendance SET AStatus = ? WHERE SessionDate = ? AND CourseID = ? AND StudentID = ?";
+        jdbcTemplate.update(sql,
+            attendance.getAStatus(),   
+            oldSessionDate,            
+            oldCourseId,               
+            oldStudentId               
+        );
     }
 
     @Override
-    public void deleteAttendance(int sessionId, int studentId) {
-        //
+    public void deleteAttendance(String sessionDate, int courseId, int studentId) {
+        String sql = "DELETE FROM Attendance WHERE SessionDate = ? AND CourseID = ? AND StudentID = ?";
+        jdbcTemplate.update(sql, sessionDate, courseId, studentId);
     }
 
 }

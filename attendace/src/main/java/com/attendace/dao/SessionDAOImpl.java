@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class SessionDAOImpl {
+public class SessionDAOImpl implements SessionDAO {
     
     private final JdbcTemplate jdbcTemplate;
 
@@ -25,19 +25,26 @@ public class SessionDAOImpl {
     }
 
     @Override
-    public Session getSessionById(int sessionId) { return null; }
+    public Session getSessionById(String sessionDate, int courseId) { return null; }
 
     @Override
     public List<Session> getAllSessions() { return null; }
 
     @Override
-    public void updateSession(Session session) {
-        //
+    public void updateSession(Session session, String oldSessionDate, int oldCourseId) {
+        String sql = "UPDATE Session SET SessionDate = ?, CourseID = ? WHERE SessionDate = ? AND CourseID = ?";
+        jdbcTemplate.update(sql,
+            session.getSessionDate().toString(),
+            session.getCourseId(),
+            oldSessionDate,
+            oldCourseId
+        );
     }
 
     @Override
-    public void deleteSession(int sessionId) {
-        //
+    public void deleteSession(String sessionDate, int courseId) {
+        String sql = "DELETE FROM Session WHERE SessionDate = ? AND CourseID = ?";
+        jdbcTemplate.update(sql, sessionDate, courseId);
     }
 
 }

@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class CourseDAOImpl {
+public class CourseDAOImpl implements CourseDAO {
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -32,12 +32,18 @@ public class CourseDAOImpl {
 
     @Override
     public void updateCourse(Course course) {
-        //
+        String sql = "UPDATE Course SET CourseCode = ?, CourseName = ? WHERE CourseID = ?";
+        jdbcTemplate.update(sql,
+            course.getCourseCode(),  
+            course.getCourseName(),  
+            course.getCourseId()     
+    );
     }
 
     @Override
     public void deleteCourse(int courseId) {
-        //
+        String sql = "DELETE FROM Course WHERE CourseID = ?";
+        jdbcTemplate.update(sql, courseId);
     }
 
 }

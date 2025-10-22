@@ -5,8 +5,8 @@ import java.util.List;
 
 public interface AttendanceDAO {
     void addAttendance(Attendance attendance);
-    Attendance getAttendanceById(int sessionId, int studentId);
+    Attendance getAttendanceById(String sessionDate, int courseId, int studentId);
     List<Attendance> getAllAttendance();
-    void updateAttendance(Attendance attendance);
-    void deleteAttendance(int sessionId, int studentId);
+    void updateAttendance(Attendance attendance, String oldSessionDate, int oldCourseId, int oldStudentId);
+    void deleteAttendance(String sessionDate, int courseId, int studentId);
 }

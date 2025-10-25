@@ -25,10 +25,30 @@ public class CourseDAOImpl implements CourseDAO {
     }
 
     @Override
-    public Course getCourseById(int courseId) { return null; }
+    public Course getCourseById(int courseId) { 
+        String sql = "SELECT * FROM Course WHERE CourseID = ?";
+
+        return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
+            Course course = new Course();
+            course.setCourseId(rs.getInt("CourseID"));
+            course.setCourseCode(rs.getString("CourseCode"));
+            course.setCourseName(rs.getString("CourseName"));
+            return course;
+        }, courseId);
+    }
 
     @Override
-    public List<Course> getAllCourses() { return null; }
+    public List<Course> getAllCourses() { 
+        String sql = "SELECT * FROM Course";
+
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            Course course = new Course();
+            course.setCourseId(rs.getInt("CourseID"));
+            course.setCourseCode(rs.getString("CourseCode"));
+            course.setCourseName(rs.getString("CourseName"));
+            return course;
+        });
+    }
 
     @Override
     public void updateCourse(Course course) {

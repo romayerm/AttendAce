@@ -1,6 +1,8 @@
 package com.attendace.dao;
 
 import com.attendace.model.Session;
+
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -25,10 +27,28 @@ public class SessionDAOImpl implements SessionDAO {
     }
 
     @Override
-    public Session getSessionById(String sessionDate, int courseId) { return null; }
+    public Session getSessionById(String sessionDate, int courseId) { 
+        String sql = "SELECT * FROM Session WHERE SessionDate = ? AND CourseID = ?";
+
+        return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
+            Session session = new Session();
+            session.setSessionDate(LocalDate.parse(rs.getString("SessionDate")));
+            session.setCourseId(rs.getInt("CourseID"));
+            return session;
+        }, sessionDate, courseId);
+     }
 
     @Override
-    public List<Session> getAllSessions() { return null; }
+    public List<Session> getAllSessions() { 
+        String sql = "SELECT * FROM Session";
+
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            Session session = new Session();
+            session.setSessionDate(LocalDate.parse(rs.getString("SessionDate")));
+            session.setCourseId(rs.getInt("CourseID"));
+            return session;
+        });
+     }
 
     @Override
     public void updateSession(Session session, String oldSessionDate, int oldCourseId) {

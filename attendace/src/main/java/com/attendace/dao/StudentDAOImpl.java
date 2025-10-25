@@ -27,12 +27,32 @@ public class StudentDAOImpl implements StudentDAO {
 
     @Override
     public Student getStudentByID(int studentId) {
-        return null;
+        String sql = "SELECT * FROM Student WHERE StudentID = ?";
+
+        return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
+            Student student = new Student();
+            student.setStudentId(rs.getInt("StudentID"));
+            student.setEmplid(rs.getInt("EMPLID"));
+            student.setStudentFName(rs.getString("StudentFName"));
+            student.setStudentLName(rs.getString("StudentLName"));
+            student.setStudentEmail(rs.getString("StudentEmail"));
+            return student;
+        }, studentId);
     }
 
     @Override
     public List<Student> getAllStudents() {
-        return null;
+        String sql = "SELECT * FROM Student";
+
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            Student student = new Student();
+            student.setStudentId(rs.getInt("StudentID"));
+            student.setEmplid(rs.getInt("EMPLID"));
+            student.setStudentFName(rs.getString("StudentFName"));
+            student.setStudentLName(rs.getString("StudentLName"));
+            student.setStudentEmail(rs.getString("StudentEmail"));
+            return student;
+        });
     }
 
     @Override

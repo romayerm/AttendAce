@@ -1,4 +1,4 @@
-package com.attendace.dao;
+package com.attendace.model.dao;
 
 import com.attendace.model.Attendance;
 import com.attendace.model.AttendanceStatus;

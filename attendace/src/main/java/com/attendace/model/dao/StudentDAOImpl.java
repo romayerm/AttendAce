@@ -1,4 +1,4 @@
-package com.attendace.dao;
+package com.attendace.model.dao;
 
 import com.attendace.model.Student;
 import java.util.List;
@@ -27,9 +27,9 @@ public class StudentDAOImpl implements StudentDAO {
 
     @Override
     public Student getStudentByID(int studentId) {
-        String sql = "SELECT * FROM Student WHERE StudentID = ?";
-
-        return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
+        String sql = "SELECT * FROM Student WHERE StudentID = ?";                   //defines SQL query to run
+                                                                                    //"?" is a parameter placeholder to prevent SQL injection
+        return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {                   
             Student student = new Student();
             student.setStudentId(rs.getInt("StudentID"));
             student.setEmplid(rs.getInt("EMPLID"));

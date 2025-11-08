@@ -1,4 +1,4 @@
-package com.attendace.dao;
+package com.attendace.model.dao;
 
 import com.attendace.model.Course;
 import java.util.List;

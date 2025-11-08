@@ -69,11 +69,11 @@ public class Student {
     @Override
     public String toString() {
         return "Student: " +
-               "\nID - " + studentId +
-               ",\nEMPLID - " + emplid +
-               ",\nFirst Name - " + studentFName +
-               ",\nLast Name - " + studentLName +
-               ",\nEmail - " + studentEmail +
+               "\n ID - " + studentId +
+               ",\n EMPLID - " + emplid +
+               ",\n First Name - " + studentFName +
+               ",\n Last Name - " + studentLName +
+               ",\n Email - " + studentEmail +
                ".";
     }
 }

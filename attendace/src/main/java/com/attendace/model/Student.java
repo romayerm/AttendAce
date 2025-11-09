@@ -1,14 +1,26 @@
 package com.attendace.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 import java.util.Objects;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Entity
+@Table(name = "students")
 public class Student {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto-increment for SQLite
     private Integer studentId;
+
+    @Column(unique = true)
     private Integer emplid;
+
+    @Column(nullable = false)
     private String studentFName;
+
+    @Column(nullable = false)
     private String studentLName;
+
+    @Column(unique = true, nullable = false)
     private String studentEmail;
 
     public Student() {}
@@ -21,13 +33,13 @@ public class Student {
         this.studentEmail = studentEmail;
     }
 
-    //getters & setters
+    // Getters & Setters
     public Integer getStudentId() { return studentId; }
     public void setStudentId(Integer studentId) { this.studentId = studentId; }
 
     public Integer getEmplid() { return emplid; }
     public void setEmplid(Integer emplid) { this.emplid = emplid; }
-    
+
     public String getStudentFName() { return studentFName; }
     public void setStudentFName(String studentFName) { this.studentFName = studentFName; }
 
@@ -45,13 +57,10 @@ public class Student {
         if (studentId != null && other.studentId != null) {
             return Objects.equals(studentId, other.studentId);
         }
-        return Objects.equals(emplid, other.emplid) &&
-           studentEmail != null && other.studentEmail != null &&
-           studentFName != null && other.studentFName != null &&
-           studentLName != null && other.studentLName != null &&
-           studentEmail.trim().equalsIgnoreCase(other.studentEmail.trim()) &&
-           studentFName.trim().equalsIgnoreCase(other.studentFName.trim()) &&
-           studentLName.trim().equalsIgnoreCase(other.studentLName.trim());
+        return Objects.equals(emplid, other.emplid)
+            && Objects.equals(studentEmail, other.studentEmail)
+            && Objects.equals(studentFName, other.studentFName)
+            && Objects.equals(studentLName, other.studentLName);
     }
 
     @Override
@@ -68,12 +77,12 @@ public class Student {
 
     @Override
     public String toString() {
-        return "Student: " +
-               "\n ID - " + studentId +
-               ",\n EMPLID - " + emplid +
-               ",\n First Name - " + studentFName +
-               ",\n Last Name - " + studentLName +
-               ",\n Email - " + studentEmail +
-               ".";
+        return "Student{" +
+               "studentId=" + studentId +
+               ", emplid=" + emplid +
+               ", firstName='" + studentFName + '\'' +
+               ", lastName='" + studentLName + '\'' +
+               ", email='" + studentEmail + '\'' +
+               '}';
     }
 }

@@ -1,11 +1,16 @@
 package com.attendace.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Attendance {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer attendanceId;
+    
+    //?????
     private LocalDate sessionDate;
     private Integer courseId;
     private Integer studentId;
@@ -49,11 +54,11 @@ public class Attendance {
 
     @Override
     public String toString() {
-        return "Attendance:" +
-               "\nSession Date - " + sessionDate +
-               ",\nCourse ID - " + courseId +
-               ",\nStudent ID - " + studentId +
-               ",\n Attendance Status - " + aStatus +
-               ".";
+        return "Attendance{" +
+               " sessionDate=" + sessionDate + '\'' +
+               ", courseId=" + courseId + '\'' +
+               ", studentId=" + studentId + '\'' +
+               ", attendanceStatus=" + aStatus +
+               "}";
     }
 }

@@ -78,11 +78,11 @@ public class Student {
     @Override
     public String toString() {
         return "Student{" +
-               "studentId=" + studentId +
-               ", emplid=" + emplid +
+               "studentId=" + studentId + '\'' +
+               ", emplid=" + emplid + '\'' +
                ", firstName='" + studentFName + '\'' +
                ", lastName='" + studentLName + '\'' +
-               ", email='" + studentEmail + '\'' +
-               '}';
+               ", email='" + studentEmail +
+               "}";
     }
 }

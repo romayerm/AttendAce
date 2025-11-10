@@ -1,12 +1,20 @@
 package com.attendace.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 import java.util.Objects;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Entity
+@Table(name = "courses")
 public class Course {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto-increment for SQLite
     private Integer courseId;
+
+    @Column(unique = true, nullable = false)
     private String courseCode;
+
+    @Column(unique = true, nullable = false)
     private String courseName;
 
     public Course() {}
@@ -55,10 +63,10 @@ public class Course {
 
     @Override
     public String toString() {
-        return "Course:" +
-               "\nCourse ID - " + courseId +
-               ",\nCourse Code - " + courseCode + 
-               ",\nCourse Name - " + courseName +
-               ".";
+        return "Course{" +
+               "courseId=" + courseId + '\'' +
+               ", courseCode=" + courseCode + '\'' +
+               ", CourseName=" + courseName +
+               "}";
     }
 }

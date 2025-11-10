@@ -1,45 +1,59 @@
 package com.attendace.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Entity
+@Table(name = "sessions")
 public class Session {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) 
+    private Integer sessionId;
+
+    @Column(nullable = false)
     private LocalDate sessionDate;
-    private Integer courseId;
+
+    @ManyToOne
+    @JoinColumn(name = "courseId", nullable = false)
+    private Course course;
 
     public Session() {}
 
-    public Session(LocalDate sessionDate, Integer courseId) {
+    public Session(LocalDate sessionDate, Course course) {
         this.sessionDate = sessionDate;
-        this.courseId = courseId;
+        this.course = course;
     }
+
+    public Integer getSessionId() { return sessionId; }
+    public void setSessionId(Integer sessionId) { this.sessionId = sessionId; }
 
     public LocalDate getSessionDate() { return sessionDate; }
     public void setSessionDate(LocalDate sessionDate) { this.sessionDate = sessionDate; }
 
-    public Integer getCourseId() { return courseId; }
-    public void setCourseId(Integer courseId) { this.courseId = courseId; }
+    public Course getCourse() { return course; }
+    public void setCourse(Course course) { this.course = course; }
 
-        @Override
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Session)) return false;
         Session other = (Session) o;
-        return Objects.equals(sessionDate, other.sessionDate) && Objects.equals(courseId, other.courseId);
+        return Objects.equals(sessionDate, other.sessionDate) && Objects.equals(course, other.course);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(sessionDate, courseId);
+        return Objects.hash(sessionDate, course);
     }
 
     @Override
     public String toString() {
-        return "Session:" +
-               "\nSession Date - " + sessionDate +
-               ",\nCourse ID - " + courseId +
-               ".";
+        return "Session{" +
+               "sessionId=" + sessionId + '\'' +
+               ", sessionDate=" + sessionDate + '\'' +
+               ", courseId=" + course +
+               "}";
     }
 }

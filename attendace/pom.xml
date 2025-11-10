@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.6</version>
+		<version>3.5.7</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.attendace</groupId>
@@ -33,22 +33,19 @@
 		<dependency>
     		<groupId>org.xerial</groupId>
     		<artifactId>sqlite-jdbc</artifactId>
-    		<version>3.45.3.0</version>
 		</dependency>
-		<!--
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jdbc</artifactId>
-		</dependency>>
-		-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
-    		<groupId>org.springframework.boot</groupId>
-    		<artifactId>spring-boot-starter-jdbc</artifactId>
+  			<groupId>org.hibernate.orm</groupId>
+  			<artifactId>hibernate-community-dialects</artifactId>
 		</dependency>
+		<dependency>
+    		<groupId>org.springframework.boot</groupId>
+    		<artifactId>spring-boot-starter-data-jpa</artifactId>
+  		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -61,6 +58,10 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+        			<jvmArguments>-Xms256m -Xmx1024m</jvmArguments>
+					<!-- <jvmArguments>-Xms512m -Xmx4096m</jvmArguments> for beefier PC -->
+      			</configuration>
 			</plugin>
 		</plugins>
 	</build>

@@ -1,0 +1,87 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background-color: #4e92ce;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.page {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Only the active page is visible */
+.page.active {
+  display: flex;
+}
+
+h1, h2 {
+  margin-bottom: 1rem;
+}
+
+p {
+  margin-bottom: 1.5rem;
+}
+
+#navMenu,
+#CoursesButtons {
+  width: 100%;
+  display: flex;
+  flex-direction: column;   /* buttons stacked vertically */
+  gap: 0.75rem;             /* space between buttons */
+  margin-bottom: 1rem;
+}
+
+.navBtn {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+
+  background: #1976d2;
+  color: white;
+  font-weight: 500;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
+}
+
+.navBtn:hover {
+  background: #125ba3;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+.navBtn:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* "No courses" message */
+#NoCourses {
+  margin-bottom: 1rem;
+  color: #444;
+  font-size: 0.95rem;
+}
+

@@ -56,7 +56,8 @@ import com.attendace.repository.StudentRepository;
 
     /* 
     
-     curl -X POST http://localhost:8080/api/createStudent   -H "Content-Type: application/json"   -d '{
+     curl -X POST http://localhost:8080/api/createStudent   -H "Content-Type: application/json"   -d 
+     '{
         "emplid": 123456,
         "studentFName": "Ada",
         "studentLName": "Lovelace",

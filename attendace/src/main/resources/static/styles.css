@@ -31,10 +31,27 @@ body {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
+.logo-fixed {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  width: 60px;
+  height: auto;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  z-index: 1100;
+}
+
+.logo-fixed:hover {
+  transform: scale(1.1);
+  opacity: 1;
+}
+
 /* Only the active page is visible */
 .page.active {
   display: flex;
-}
+} 
 
 h1, h2 {
   margin-bottom: 1rem;

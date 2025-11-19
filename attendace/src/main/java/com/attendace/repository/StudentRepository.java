@@ -20,5 +20,7 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     Optional<Student> findByEmplid(Integer emplid);
     //Same here, so if you wanna add something else, just make sure you name and capitalize it correctly. 
     //For example I think findAll is another standard search word
-    Student findByStudentEmail(String studentEmail);
+    Optional<Student> findByStudentEmail(String studentEmail);
+    Optional<Student> findByStudentLName(String studentLName);
+    void deleteByEmplid(Integer emplid);
 }

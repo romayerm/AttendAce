@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
-@Table(name = "sessions")
+@Table(name = "Session")
 public class Session {
 
     @Id
@@ -40,12 +40,12 @@ public class Session {
         if (this == o) return true;
         if (!(o instanceof Session)) return false;
         Session other = (Session) o;
-        return Objects.equals(sessionDate, other.sessionDate) && Objects.equals(course, other.course);
+        return Objects.equals(sessionId, other.sessionId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(sessionDate, course);
+        return Objects.hash(sessionId);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class Session {
         return "Session{" +
                "sessionId=" + sessionId + '\'' +
                ", sessionDate=" + sessionDate + '\'' +
-               ", courseId=" + course +
-               "}";
+               ", courseId=" + (course != null ? course.getCourseId() : null) +
+               '}';
     }
 }

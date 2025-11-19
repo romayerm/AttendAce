@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "courses")
+@Table(name = "Course")
 public class Course {
 
     @Id
@@ -20,7 +20,7 @@ public class Course {
     public Course() {}
 
     public Course(Integer courseId, String courseCode, String courseName) {
-        this.courseId = courseId;
+        //this.courseId = courseId;
         this.courseCode = courseCode;
         this.courseName = courseName;
     }
@@ -66,7 +66,7 @@ public class Course {
         return "Course{" +
                "courseId=" + courseId + '\'' +
                ", courseCode=" + courseCode + '\'' +
-               ", CourseName=" + courseName +
-               "}";
+               ", courseName=" + courseName +
+               '}';
     }
 }

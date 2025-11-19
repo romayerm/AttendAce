@@ -4,14 +4,14 @@ import jakarta.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "students")
+@Table(name = "Student")
 public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto-increment for SQLite
     private Integer studentId;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private Integer emplid;
 
     @Column(nullable = false)
@@ -25,8 +25,7 @@ public class Student {
 
     public Student() {}
 
-    public Student(Integer studentId, Integer emplid, String studentFName, String studentLName, String studentEmail) {
-        this.studentId = studentId;
+    public Student(Integer emplid, String studentFName, String studentLName, String studentEmail) {
         this.emplid = emplid;
         this.studentFName = studentFName;
         this.studentLName = studentLName;
@@ -83,6 +82,6 @@ public class Student {
                ", firstName='" + studentFName + '\'' +
                ", lastName='" + studentLName + '\'' +
                ", email='" + studentEmail +
-               "}";
+               '}';
     }
 }

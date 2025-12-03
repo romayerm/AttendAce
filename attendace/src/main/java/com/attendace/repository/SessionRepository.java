@@ -8,12 +8,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.attendace.model.Session;
-import com.attendace.model.Course;
 
 @Repository
 public interface SessionRepository extends JpaRepository<Session, Integer> {
     List<Session> findBySessionDate(LocalDate sessionDate);
-    List<Session> findByCourse(Course course);
-    Optional<Session> findBySessionDateAndCourse(LocalDate sessionDate, Course course);
-    void deleteBySessionDateAndCourse(LocalDate sessionDate, Course course);
+    List<Session> findByCourse_CourseCode(String courseCode);
+    //findAll
+    Optional<Session> findBySessionDateAndCourse_CourseCode(LocalDate sessionDate, String courseCode);
+
+    //save (POST/create)
+
+    void deleteBySessionDateAndCourse(LocalDate sessionDate, String courseCode);
+    //deleteAll
 }

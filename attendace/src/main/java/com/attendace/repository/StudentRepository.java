@@ -14,13 +14,20 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Integer> {
+
     //These methods are standard JPARepository methods. They are "magically" doing query's in the background
     // this only works because of careful naming: 
     // find_by_Emplid <- find is standard search word, by too and Emplid is our variable named capitalized
+
     Optional<Student> findByEmplid(Integer emplid);
-    //Same here, so if you wanna add something else, just make sure you name and capitalize it correctly. 
-    //For example I think findAll is another standard search word
-    Optional<Student> findByStudentEmail(String studentEmail);
+    //Optional<Student> findByStudentEmail(String studentEmail); <<< decided I don't need it for now
     Optional<Student> findByStudentLName(String studentLName);
+    //List<Student> findByCourse_CourseCode(String courseCode); <<< needs relationship in student MtM above list of courses enrolled in
+    //findAll is included by extending JPARepository
+
+    //save (POST/create) is included by extending JPARepository
+
     void deleteByEmplid(Integer emplid);
+    //deleteAll is included by extending JPARepository
+    
 }

@@ -15,8 +15,11 @@ public class Session {
     @Column(nullable = false)
     private LocalDate sessionDate;
 
-    @ManyToOne
-    @JoinColumn(name = "courseId", nullable = false)
+    //list of present and absent students by ID
+
+
+    @OneToMany
+    @JoinColumn(name = "courseId", nullable = true) // set to false after testing
     private Course course;
 
     public Session() {}

@@ -17,6 +17,10 @@ public class Course {
     @Column(unique = true, nullable = false)
     private String courseName;
 
+    //list of students enrolled
+
+    //list of sessions
+
     public Course() {}
 
     public Course(Integer courseId, String courseCode, String courseName) {

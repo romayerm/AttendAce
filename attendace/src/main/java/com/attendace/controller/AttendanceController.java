@@ -43,10 +43,9 @@ import com.attendace.repository.AttendanceRepository;
     @Autowired
     private SessionRepository sessionRepository;
 
-    /* 
     @Autowired
     private AttendanceRepository attendanceRepository;
-    */
+
     @Autowired
     private CourseRepository courseRepository;
     
@@ -70,7 +69,7 @@ import com.attendace.repository.AttendanceRepository;
     For example: 
     curl http://localhost:8080/api/getStudent/123456
     */
-   @GetMapping("/getStudent/{emplid}")
+    @GetMapping("/getStudent/{emplid}")
         public ResponseEntity<Student> getStudent(@PathVariable Integer emplid) {
             return studentRepository.findByEmplid(emplid)
             .map(ResponseEntity::ok)
@@ -78,6 +77,7 @@ import com.attendace.repository.AttendanceRepository;
         }
 
 
+    //http://localhost:8080/api/getStudent/Lovelace
     @GetMapping("/getStudent/{studentLName}")
         public ResponseEntity<Student> getStudent(@PathVariable String studentLName) {
             return studentRepository.findByStudentLName(studentLName)
@@ -85,15 +85,15 @@ import com.attendace.repository.AttendanceRepository;
             .orElse(ResponseEntity.notFound().build());
         }
 
-
-    /* @GetMapping("/getStudentsByCourse/{courseCode}")
+    
+    @GetMapping("/getStudentsByCourse/{courseCode}")
         public ResponseEntity<List<Student>> getStudentsByCourse(@PathVariable String courseCode) {
             List<Student> students = studentRepository.findByCourse_CourseCode(courseCode);
             if (students.isEmpty()) {
                 return ResponseEntity.noContent().build();
             }
             return ResponseEntity.ok(students); 
-        } */
+        } 
 
 
     // http://localhost:8080/api/getAllStudents
@@ -119,7 +119,8 @@ import com.attendace.repository.AttendanceRepository;
     }
 
 
-   @DeleteMapping("/deleteStudent/{emplid}")
+    //curl -X DELETE http://localhost:8080/api/deleteStudent/123456
+    @DeleteMapping("/deleteStudent/{emplid}")
     public ResponseEntity<Object> deleteStudent(@PathVariable Integer emplid) {
     return studentRepository.findByEmplid(emplid)
             .map(student -> {
@@ -130,13 +131,15 @@ import com.attendace.repository.AttendanceRepository;
     }
 
     
-   @DeleteMapping("/deleteStudents")
+    //curl -X DELETE http://localhost:8080/api/deleteStudents
+    @DeleteMapping("/deleteStudents")
     public void deleteStudent() {
      studentRepository.deleteAll();
     }
 
     // STUDENT END | SESSION BEGIN
 
+    //curl http://localhost:8080/api/getSession/2025-02-01
     @GetMapping("/getSession/{date}")
         public ResponseEntity<List<Session>> getSessionsByDate( 
         @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
@@ -148,7 +151,7 @@ import com.attendace.repository.AttendanceRepository;
         }
 
 
-    /* 
+    // 
     @GetMapping("/getSession/{courseCode}")
         public ResponseEntity<List<Session>> getSessionsByCourseCode(@PathVariable String courseCode) {
             List<Session> sessions = sessionRepository.findByCourse_CourseCode(courseCode);
@@ -157,7 +160,6 @@ import com.attendace.repository.AttendanceRepository;
             }
             return ResponseEntity.ok(sessions);
         }
-    */
 
 
     // http://localhost:8080/api/getAllSessions
@@ -167,6 +169,7 @@ import com.attendace.repository.AttendanceRepository;
     }
 
 
+    //curl http://localhost:8080/api/getSession/2025-02-01/CS101
     @GetMapping("/getSession/{date}/{courseCode}")
         public ResponseEntity<Session> getSessionByDateAndCourse(
         @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
@@ -181,8 +184,9 @@ import com.attendace.repository.AttendanceRepository;
     
 
     /*
+    http://localhost:8080/api/createSession
     '{
-        "sessionDate": "2025-01-28",
+        "sessionDate": "2025-02-01",
         "courseCode": "CS101"
     ''}
     */
@@ -191,34 +195,255 @@ import com.attendace.repository.AttendanceRepository;
             Course course = courseRepository.findByCourseCode(request.getCourseCode())
                 .orElse(null);
             if (course == null) {
-            return ResponseEntity.badRequest().build();
-        }
-        Session session = new Session(request.getSessionDate(), course);
-        Session saved = sessionRepository.save(session);
-        return ResponseEntity.ok(saved);
+                return ResponseEntity.badRequest().build();
+            }
+            Session session = new Session(request.getSessionDate(), course);
+            Session saved = sessionRepository.save(session);
+            return ResponseEntity.ok(saved);
         }
 
+
+    //curl -X DELETE http://localhost:8080/api/deleteSession/2025-02-01/CS101
+    @DeleteMapping("/deleteSession/{date}/{courseCode}")
+        public ResponseEntity<Void> deleteSessionByDateAndCourse(
+        @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+        @PathVariable String courseCode) {
+            sessionRepository.deleteBySessionDateAndCourse_CourseCode(date, courseCode);
+            return ResponseEntity.noContent().build(); 
+        }
+
+
+    // curl -X DELETE http://localhost:8080/api/deleteSessions
+    @DeleteMapping("/deleteSessions")
+        public ResponseEntity<Void> deleteAllSessions() {
+            sessionRepository.deleteAll();
+            return ResponseEntity.noContent().build();
+        }
+
+    // SESSION END | COURSE BEGIN
+
+    // curl http://localhost:8080/api/getCourse/CS101
+    @GetMapping("/getCourse/{courseCode}")
+        public ResponseEntity<Course> getCourseByCode(@PathVariable String courseCode) {
+            return courseRepository.findByCourseCode(courseCode)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
+        }
+
+
+    /*
+    // curl http://localhost:8080/api/getCourse/Intro%20to%20CS    
+    @GetMapping("/getCourse/{courseName}")
+        public ResponseEntity<Course> getCourseByName(@PathVariable String courseName) {
+            return courseRepository.findByCourseName(courseName)
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
+        }
+    */
+
+
+    // curl http://localhost:8080/api/getCourses
+    @GetMapping("/getCourses")
+        public List<Course> getAllCourses() {
+            return courseRepository.findAll();
+        }
 
     
+    /* curl -X POST http://localhost:8080/api/createCourse 
+        '{
+            "courseCode": "CS101",
+            "courseName": "Intro to CS"
+        }'
+    */
+    @PostMapping("/createCourse")
+        public Course createCourse(@RequestBody Course course) {
+            return courseRepository.save(course);
+        }
 
 
+    // curl -X DELETE http://localhost:8080/api/deleteCourse/CS101
+    @DeleteMapping("/deleteCourse/{courseCode}")
+        public ResponseEntity<Void> deleteCourseByCode(@PathVariable String courseCode) {
+            courseRepository.deleteByCourseCode(courseCode);
+            return ResponseEntity.noContent().build();
+        }
 
 
+    // curl -X DELETE http://localhost:8080/api/courses
+    @DeleteMapping("/courses")
+        public ResponseEntity<Void> deleteAllCourses() {
+            courseRepository.deleteAll();
+            return ResponseEntity.noContent().build();
+        }
+
+    // COURSE END | ATTENDANCE BEGIN
+
+    // curl http://localhost:8080/api/getAttendance/2025-02-01/CS101
+    @GetMapping("/getAttendance/{date}/{courseCode}")
+        public ResponseEntity<List<Attendance>> getAttendanceBySession(
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @PathVariable String courseCode) {
+                Session session = sessionRepository
+                    .findBySessionDateAndCourse_CourseCode(date, courseCode)
+                    .orElse(null);
+                if (session == null) return ResponseEntity.notFound().build();
+                return ResponseEntity.ok(attendanceRepository.findBySession(session));
+            }
 
 
+    // curl http://localhost:8080/api/getAttendance/2025-02-01/CS101/123456
+    @GetMapping("/getAttendance/{date}/{courseCode}/{emplid}")
+        public ResponseEntity<Attendance> getAttendanceBySessionAndStudent(
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @PathVariable String courseCode,
+            @PathVariable Integer emplid) {
+                Session session = sessionRepository
+                    .findBySessionDateAndCourse_CourseCode(date, courseCode)
+                    .orElse(null);
+                Student student = studentRepository.findByEmplid(emplid).orElse(null);
+                if (session == null || student == null) return ResponseEntity.notFound().build();
+                return attendanceRepository.findBySessionAndStudent(session, student)
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
+            }
 
 
+    // curl http://localhost:8080/api/getAttendance/CS101/123456
+    @GetMapping("/getAttendance/{courseCode}/{emplid}")
+        public ResponseEntity<Attendance> getAttendanceByCourseAndStudent(
+            @PathVariable String courseCode,
+            @PathVariable Integer emplid) {
+                Course course = courseRepository.findByCourseCode(courseCode).orElse(null);
+                Student student = studentRepository.findByEmplid(emplid).orElse(null);
+                if (course == null || student == null) return ResponseEntity.notFound().build();
+                return attendanceRepository.findByCourseAndStudent(course, student)
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
+            }
 
 
+    // curl http://localhost:8080/api/getAttendance/2025-02-01/CS101/Present
+    @GetMapping("/getAttendance/{date}/{courseCode}/{status}")
+        public ResponseEntity<List<Attendance>> getAttendanceBySessionAndStatus(
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @PathVariable String courseCode,
+            @PathVariable AttendanceStatus status) {
+                Session session = sessionRepository
+                    .findBySessionDateAndCourse_CourseCode(date, courseCode)
+                    .orElse(null);
+                if (session == null) return ResponseEntity.notFound().build();
+                return ResponseEntity.ok(
+                        attendanceRepository.findBySessionAndAStatus(session, status)
+                );
+            }
 
 
+    /* curl -X POST http://localhost:8080/api/createAttendance
+        '{
+            "sessionDate": "2025-02-01",
+            "courseCode": "CS101",
+            "emplid": 123456,
+            "aStatus": "Present"
+        }'
+    */
+    @PostMapping("/createAttendance")
+        public ResponseEntity<Attendance> createAttendance(
+            @RequestBody AttendanceRequest request) {
+                Session session = sessionRepository
+                    .findBySessionDateAndCourse_CourseCode(request.getSessionDate(), request.getCourseCode())
+                    .orElse(null);
+                if (session == null) {
+                    return ResponseEntity.badRequest().build(); 
+                }
+                Course course = courseRepository.findByCourseCode(request.getCourseCode()).orElse(null);
+                if (course == null) {
+                    return ResponseEntity.badRequest().build();
+                }
+                Student student = studentRepository.findByEmplid(request.getEmplid()).orElse(null);
+                if (student == null) {
+                    return ResponseEntity.badRequest().build();
+                }
+                Attendance attendance = new Attendance(
+                        session,
+                        course,
+                        student,
+                        request.getAStatus()
+                );
+                Attendance saved = attendanceRepository.save(attendance);
+                return ResponseEntity.ok(saved);
+            }
 
 
+    // curl -X DELETE http://localhost:8080/api/deleteAttendance/2025-02-01/CS101
+    @DeleteMapping("/deleteAttendance/{date}/{courseCode}")
+        public ResponseEntity<Void> deleteAttendanceBySession(
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @PathVariable String courseCode) {
+                Session session = sessionRepository
+                    .findBySessionDateAndCourse_CourseCode(date, courseCode)
+                    .orElse(null);
+                if (session == null) {
+                    return ResponseEntity.notFound().build();
+                }
+                attendanceRepository.deleteBySession(session);
+                return ResponseEntity.noContent().build();
+            }
 
 
+    // curl -X DELETE http://localhost:8080/api/deleteAttendance/2025-02-01/CS101/
+    @DeleteMapping("/deleteAttendance/{date}/{courseCode}/{emplid}")
+        public ResponseEntity<Void> deleteAttendanceBySessionAndStudent(
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @PathVariable String courseCode,
+            @PathVariable Integer emplid) {
+                Session session = sessionRepository
+                        .findBySessionDateAndCourse_CourseCode(date, courseCode)
+                        .orElse(null);
+                Student student = studentRepository.findByEmplid(emplid).orElse(null);
+                if (session == null || student == null) {
+                    return ResponseEntity.notFound().build();
+                }
+                attendanceRepository.deleteBySessionAndStudent(session, student);
+                return ResponseEntity.noContent().build();
+            }
 
 
+    // curl -X DELETE http://localhost:8080/api/deleteAttendance/CS101
+    @DeleteMapping("/deleteAttendance/{courseCode}")
+        public ResponseEntity<Void> deleteAttendanceByCourse(@PathVariable String courseCode) {
+            Course course = courseRepository.findByCourseCode(courseCode).orElse(null);
+            if (course == null) {
+                return ResponseEntity.notFound().build();
+            }
+            attendanceRepository.deleteByCourse(course);
+            return ResponseEntity.noContent().build();
+        }
 
+
+    // curl -X DELETE http://localhost:8080/api/deleteAttendance/CS101/student/123456
+    @DeleteMapping("/deleteAttendance/{courseCode}/student/{emplid}")
+        public ResponseEntity<Void> deleteAttendanceByCourseAndStudent(
+            @PathVariable String courseCode,
+            @PathVariable Integer emplid) {
+                Course course = courseRepository.findByCourseCode(courseCode).orElse(null);
+                Student student = studentRepository.findByEmplid(emplid).orElse(null);
+                if (course == null || student == null) {
+                    return ResponseEntity.notFound().build();
+                }
+                attendanceRepository.deleteByCourseAndStudent(course, student);
+                return ResponseEntity.noContent().build();
+            }
+
+
+    // curl -X DELETE http://localhost:8080/api/deleteAttendances
+    @DeleteMapping("/deleteAttendances")
+        public ResponseEntity<Void> deleteAllAttendance() {
+            attendanceRepository.deleteAll();
+            return ResponseEntity.noContent().build();
+        }
+
+
+    // curl http://localhost:8080/api/compactDb
     @GetMapping("/compactDb")
     public ResponseEntity<String> compactDatabase() {
         try {
@@ -226,7 +451,7 @@ import com.attendace.repository.AttendanceRepository;
             return ResponseEntity.ok("Database compacted successfully ✅");
         } catch (Exception e) {
             return ResponseEntity.internalServerError()
-                    .body("Error compacting database: " + e.getMessage());
+                .body("Error compacting database: " + e.getMessage());
         }
     }
 

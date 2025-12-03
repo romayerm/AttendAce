@@ -18,15 +18,15 @@ public class Attendance {
     //list of courses
 
     @ManyToOne
-    @JoinColumn(name = "session_id", nullable = false)
+    @JoinColumn(name = "sessionId", nullable = false)
     private Session session;
 
     @ManyToOne
-    @JoinColumn(name = "course_id", nullable = false)
+    @JoinColumn(name = "courseId", nullable = false)
     private Course course;
 
     @ManyToOne
-    @JoinColumn(name = "student_id", nullable = false)
+    @JoinColumn(name = "studentId", nullable = false)
     private Student student;
 
     @Enumerated(EnumType.STRING)

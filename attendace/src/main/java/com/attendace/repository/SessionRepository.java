@@ -18,6 +18,6 @@ public interface SessionRepository extends JpaRepository<Session, Integer> {
 
     //save (POST/create)
 
-    void deleteBySessionDateAndCourse(LocalDate sessionDate, String courseCode);
+    void deleteBySessionDateAndCourse_CourseCode(LocalDate sessionDate, String courseCode);
     //deleteAll
 }

@@ -6,6 +6,7 @@
 package com.attendace.repository;
 
 import java.util.Optional;
+import java.util.List;
 
 import com.attendace.model.Student;
 
@@ -22,7 +23,7 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     Optional<Student> findByEmplid(Integer emplid);
     //Optional<Student> findByStudentEmail(String studentEmail); <<< decided I don't need it for now
     Optional<Student> findByStudentLName(String studentLName);
-    //List<Student> findByCourse_CourseCode(String courseCode); <<< needs relationship in student MtM above list of courses enrolled in
+    List<Student> findByCourse_CourseCode(String courseCode);
     //findAll is included by extending JPARepository
 
     //save (POST/create) is included by extending JPARepository

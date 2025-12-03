@@ -17,9 +17,8 @@ public class Session {
 
     //list of present and absent students by ID
 
-
-    @OneToMany
-    @JoinColumn(name = "courseId", nullable = true) // set to false after testing
+    @ManyToOne
+    @JoinColumn(name = "courseId", nullable = false)
     private Course course;
 
     public Session() {}

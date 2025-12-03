@@ -15,11 +15,16 @@ import com.attendace.model.AttendanceStatus;
 @Repository
 public interface AttendanceRepository extends JpaRepository<Attendance, Integer> {
     List<Attendance> findBySession(Session session);
-    List<Attendance> findByCourse(Course course);
-    List<Attendance> findByStudent(Student student);
-
     Optional<Attendance> findBySessionAndStudent(Session session, Student student);
-
+    Optional<Attendance> findByCourseAndStudent(Course course, Student student);
     List<Attendance> findBySessionAndAStatus(Session session, AttendanceStatus status);
-    List<Attendance> findByCourseAndAStatus(Course course, AttendanceStatus status);
+    //findAll
+
+    //create
+
+    void deleteBySession(Session session);
+    void deleteBySessionAndStudent(Session session, Student student);
+    void deleteByCourse(Course course);
+    void deleteByCourseAndStudent(Course course, Student student);
+    //deleteAll
 }

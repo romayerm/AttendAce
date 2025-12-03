@@ -10,6 +10,11 @@ import com.attendace.model.Course;
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Integer>{
     Optional<Course> findByCourseCode(String courseCode);
-    Optional<Course> findByCourseName(String courseName);
+    //Optional<Course> findByCourseName(String courseName);
+    //findAll
+
+    //create course
+
     void deleteByCourseCode(String courseCode);
+    //deleteAll
 }

@@ -31,15 +31,15 @@ public class Attendance {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private AttendanceStatus aStatus;
+    private AttendanceStatus status;
 
     public Attendance() {}
 
-    public Attendance(Session session, Course course, Student student, AttendanceStatus aStatus) {
+    public Attendance(Session session, Course course, Student student, AttendanceStatus status) {
         this.session = session;
         this.course = course;
         this.student = student;
-        this.aStatus = aStatus;
+        this.status = status;
     }
 
     public Integer getAttendanceId() { return attendanceId; }
@@ -54,8 +54,8 @@ public class Attendance {
     public Student getStudent() { return student; }
     public void setStudent(Student student) { this.student = student; }
 
-    public AttendanceStatus getAStatus() { return aStatus; }
-    public void setAStatus(AttendanceStatus aStatus) { this.aStatus = aStatus; }
+    public AttendanceStatus getAStatus() { return status; }
+    public void setAStatus(AttendanceStatus status) { this.status = status; }
 
         @Override
     public boolean equals(Object o) {
@@ -86,7 +86,7 @@ public class Attendance {
                ", session=" + (session != null ? session.getSessionId() : null) +
                ", course=" + (course != null ? course.getCourseId() : null) +
                ", student=" + (student != null ? student.getStudentId() : null) +
-               ", aStatus=" + aStatus +
+               ", status=" + status +
                '}';
     }
 }

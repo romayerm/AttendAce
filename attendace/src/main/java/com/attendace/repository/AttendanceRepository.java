@@ -17,7 +17,7 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Integer>
     List<Attendance> findBySession(Session session);
     Optional<Attendance> findBySessionAndStudent(Session session, Student student);
     Optional<Attendance> findByCourseAndStudent(Course course, Student student);
-    List<Attendance> findBySessionAndAStatus(Session session, AttendanceStatus status);
+    List<Attendance> findBySessionAndStatus(Session session, AttendanceStatus status);
     //findAll
 
     //create

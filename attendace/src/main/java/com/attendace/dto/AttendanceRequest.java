@@ -9,5 +9,5 @@ public class AttendanceRequest {
     private LocalDate sessionDate;
     private String courseCode;
     private Integer emplid;
-    private AttendanceStatus aStatus;
+    private AttendanceStatus status;
 }

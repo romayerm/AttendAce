@@ -2,6 +2,8 @@ package com.attendace.model;
 
 import jakarta.persistence.*;
 import java.util.Objects;
+import java.util.List;
+
 
 @Entity
 @Table(name = "Student")
@@ -22,6 +24,14 @@ public class Student {
 
     @Column(unique = true, nullable = false)
     private String studentEmail;
+
+    @ManyToMany
+        @JoinTable(
+            name = "EnrolledIn",
+            joinColumns = @JoinColumn(name = "StudentID"),
+            inverseJoinColumns = @JoinColumn(name = "CourseID")
+        )
+        private List<Course> courses;
 
     public Student() {}
 

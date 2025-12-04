@@ -86,9 +86,10 @@ import com.attendace.repository.AttendanceRepository;
         }
 
     
+
     @GetMapping("/getStudentsByCourse/{courseCode}")
         public ResponseEntity<List<Student>> getStudentsByCourse(@PathVariable String courseCode) {
-            List<Student> students = studentRepository.findByCourse_CourseCode(courseCode);
+            List<Student> students = studentRepository.findByCourses_CourseCode(courseCode);
             if (students.isEmpty()) {
                 return ResponseEntity.noContent().build();
             }
@@ -151,7 +152,7 @@ import com.attendace.repository.AttendanceRepository;
         }
 
 
-    // 
+    //
     @GetMapping("/getSession/{courseCode}")
         public ResponseEntity<List<Session>> getSessionsByCourseCode(@PathVariable String courseCode) {
             List<Session> sessions = sessionRepository.findByCourse_CourseCode(courseCode);
@@ -333,7 +334,7 @@ import com.attendace.repository.AttendanceRepository;
                     .orElse(null);
                 if (session == null) return ResponseEntity.notFound().build();
                 return ResponseEntity.ok(
-                        attendanceRepository.findBySessionAndAStatus(session, status)
+                        attendanceRepository.findBySessionAndStatus(session, status)
                 );
             }
 
@@ -367,7 +368,7 @@ import com.attendace.repository.AttendanceRepository;
                         session,
                         course,
                         student,
-                        request.getAStatus()
+                        request.getStatus()
                 );
                 Attendance saved = attendanceRepository.save(attendance);
                 return ResponseEntity.ok(saved);

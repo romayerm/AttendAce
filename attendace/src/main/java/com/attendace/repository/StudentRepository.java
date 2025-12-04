@@ -23,7 +23,7 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     Optional<Student> findByEmplid(Integer emplid);
     //Optional<Student> findByStudentEmail(String studentEmail); <<< decided I don't need it for now
     Optional<Student> findByStudentLName(String studentLName);
-    List<Student> findByCourse_CourseCode(String courseCode);
+    List<Student> findByCourses_CourseCode(String courseCode);
     //findAll is included by extending JPARepository
 
     //save (POST/create) is included by extending JPARepository

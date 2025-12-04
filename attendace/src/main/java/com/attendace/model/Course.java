@@ -2,6 +2,7 @@ package com.attendace.model;
 
 import jakarta.persistence.*;
 import java.util.Objects;
+import java.util.List;
 
 @Entity
 @Table(name = "Course")
@@ -17,7 +18,8 @@ public class Course {
     @Column(unique = true, nullable = false)
     private String courseName;
 
-    //list of students enrolled
+    @ManyToMany(mappedBy = "courses")
+    private List<Student> students;
 
     //list of sessions
 

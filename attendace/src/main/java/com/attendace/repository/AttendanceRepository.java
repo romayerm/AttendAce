@@ -10,6 +10,9 @@ import com.attendace.model.Attendance;
 import com.attendace.model.Session;
 import com.attendace.model.Course;
 import com.attendace.model.Student;
+
+import jakarta.transaction.Transactional;
+
 import com.attendace.model.AttendanceStatus;
 
 @Repository
@@ -21,10 +24,13 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Integer>
     //findAll
 
     //create
-
+    @Transactional
     void deleteBySession(Session session);
+    @Transactional
     void deleteBySessionAndStudent(Session session, Student student);
+    @Transactional
     void deleteByCourse(Course course);
+    @Transactional
     void deleteByCourseAndStudent(Course course, Student student);
     //deleteAll
 }

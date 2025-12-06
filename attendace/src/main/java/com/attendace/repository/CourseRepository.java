@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 
 import com.attendace.model.Course;
 
+import jakarta.transaction.Transactional;
+
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Integer>{
     Optional<Course> findByCourseCode(String courseCode);
@@ -15,6 +17,7 @@ public interface CourseRepository extends JpaRepository<Course, Integer>{
 
     //create course
 
+    @Transactional
     void deleteByCourseCode(String courseCode);
     //deleteAll
 }

@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import com.attendace.model.Session;
 
+import jakarta.transaction.Transactional;
+
 @Repository
 public interface SessionRepository extends JpaRepository<Session, Integer> {
     List<Session> findBySessionDate(LocalDate sessionDate);
@@ -18,6 +20,7 @@ public interface SessionRepository extends JpaRepository<Session, Integer> {
 
     //save (POST/create)
 
+    @Transactional
     void deleteBySessionDateAndCourse_CourseCode(LocalDate sessionDate, String courseCode);
     //deleteAll
 }

@@ -67,9 +67,9 @@ import com.attendace.repository.AttendanceRepository;
     /* 
     This is for fetching a specific student.
     For example: 
-    curl http://localhost:8080/api/getStudent/123456
+    curl http://localhost:8080/api/getStudentID/123456
     */
-    @GetMapping("/getStudent/{emplid}")
+    @GetMapping("/getStudentID/{emplid}")
         public ResponseEntity<Student> getStudent(@PathVariable Integer emplid) {
             return studentRepository.findByEmplid(emplid)
             .map(ResponseEntity::ok)
@@ -77,8 +77,8 @@ import com.attendace.repository.AttendanceRepository;
         }
 
 
-    //http://localhost:8080/api/getStudent/Lovelace
-    @GetMapping("/getStudent/{studentLName}")
+    //http://localhost:8080/api/getStudentLName/Lovelace
+    @GetMapping("/getStudentLName/{studentLName}")
         public ResponseEntity<Student> getStudent(@PathVariable String studentLName) {
             return studentRepository.findByStudentLName(studentLName)
             .map(ResponseEntity::ok)
@@ -86,8 +86,8 @@ import com.attendace.repository.AttendanceRepository;
         }
 
     
-
-    @GetMapping("/getStudentsByCourse/{courseCode}")
+    //http://localhost:8080/api/getStudentsByCC/CS101
+    @GetMapping("/getStudentsByCC/{courseCode}")
         public ResponseEntity<List<Student>> getStudentsByCourse(@PathVariable String courseCode) {
             List<Student> students = studentRepository.findByCourses_CourseCode(courseCode);
             if (students.isEmpty()) {
@@ -140,8 +140,8 @@ import com.attendace.repository.AttendanceRepository;
 
     // STUDENT END | SESSION BEGIN
 
-    //curl http://localhost:8080/api/getSession/2025-02-01
-    @GetMapping("/getSession/{date}")
+    //curl http://localhost:8080/api/getSession/byDate/2025-02-01
+    @GetMapping("/getSession/byDate/{date}")
         public ResponseEntity<List<Session>> getSessionsByDate( 
         @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
             List<Session> sessions = sessionRepository.findBySessionDate(date);
@@ -152,8 +152,8 @@ import com.attendace.repository.AttendanceRepository;
         }
 
 
-    //
-    @GetMapping("/getSession/{courseCode}")
+    // http://localhost:8080/api/getSession/byCC/CS101
+    @GetMapping("/getSession/byCC/{courseCode}")
         public ResponseEntity<List<Session>> getSessionsByCourseCode(@PathVariable String courseCode) {
             List<Session> sessions = sessionRepository.findByCourse_CourseCode(courseCode);
             if (sessions.isEmpty()) {
@@ -270,8 +270,8 @@ import com.attendace.repository.AttendanceRepository;
         }
 
 
-    // curl -X DELETE http://localhost:8080/api/courses
-    @DeleteMapping("/courses")
+    // curl -X DELETE http://localhost:8080/api/deleteCourses
+    @DeleteMapping("/deleteCourses")
         public ResponseEntity<Void> deleteAllCourses() {
             courseRepository.deleteAll();
             return ResponseEntity.noContent().build();
@@ -279,8 +279,8 @@ import com.attendace.repository.AttendanceRepository;
 
     // COURSE END | ATTENDANCE BEGIN
 
-    // curl http://localhost:8080/api/getAttendance/2025-02-01/CS101
-    @GetMapping("/getAttendance/{date}/{courseCode}")
+    // curl http://localhost:8080/api/getAttendance/date/2025-02-01/CC/CS101
+    @GetMapping("/getAttendance/date/{date}/CC/{courseCode}")
         public ResponseEntity<List<Attendance>> getAttendanceBySession(
             @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
             @PathVariable String courseCode) {
@@ -292,8 +292,8 @@ import com.attendace.repository.AttendanceRepository;
             }
 
 
-    // curl http://localhost:8080/api/getAttendance/2025-02-01/CS101/123456
-    @GetMapping("/getAttendance/{date}/{courseCode}/{emplid}")
+    // curl http://localhost:8080/api/getAttendance/date/2025-02-01/CC/CS101/ID/123456
+    @GetMapping("/getAttendance/date/{date}/CC/{courseCode}/ID/{emplid}")
         public ResponseEntity<Attendance> getAttendanceBySessionAndStudent(
             @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
             @PathVariable String courseCode,
@@ -309,8 +309,8 @@ import com.attendace.repository.AttendanceRepository;
             }
 
 
-    // curl http://localhost:8080/api/getAttendance/CS101/123456
-    @GetMapping("/getAttendance/{courseCode}/{emplid}")
+    // curl http://localhost:8080/api/getAttendance/CC/CS101/ID/123456
+    @GetMapping("/getAttendance/CC/{courseCode}/ID/{emplid}")
         public ResponseEntity<Attendance> getAttendanceByCourseAndStudent(
             @PathVariable String courseCode,
             @PathVariable Integer emplid) {
@@ -323,8 +323,8 @@ import com.attendace.repository.AttendanceRepository;
             }
 
 
-    // curl http://localhost:8080/api/getAttendance/2025-02-01/CS101/Present
-    @GetMapping("/getAttendance/{date}/{courseCode}/{status}")
+    // curl http://localhost:8080/api/getAttendanceStatus/2025-02-01/CS101/PRESENT
+    @GetMapping("/getAttendanceStatus/{date}/{courseCode}/{status}")
         public ResponseEntity<List<Attendance>> getAttendanceBySessionAndStatus(
             @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
             @PathVariable String courseCode,
@@ -339,12 +339,23 @@ import com.attendace.repository.AttendanceRepository;
             }
 
 
+    //http://localhost:8080/api/getAttendances
+    @GetMapping("/getAttendances")
+        public ResponseEntity<List<Attendance>> getAllAttendance() {
+            List<Attendance> attendanceList = attendanceRepository.findAll();
+            if (attendanceList.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.ok(attendanceList);
+        }
+
+
     /* curl -X POST http://localhost:8080/api/createAttendance
         '{
             "sessionDate": "2025-02-01",
             "courseCode": "CS101",
             "emplid": 123456,
-            "aStatus": "Present"
+            "status": "Present"
         }'
     */
     @PostMapping("/createAttendance")
@@ -375,8 +386,8 @@ import com.attendace.repository.AttendanceRepository;
             }
 
 
-    // curl -X DELETE http://localhost:8080/api/deleteAttendance/2025-02-01/CS101
-    @DeleteMapping("/deleteAttendance/{date}/{courseCode}")
+    // curl -X DELETE http://localhost:8080/api/deleteAttendanceDateCC/2025-02-01/CS101
+    @DeleteMapping("/deleteAttendanceDateCC/{date}/{courseCode}")
         public ResponseEntity<Void> deleteAttendanceBySession(
             @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
             @PathVariable String courseCode) {
@@ -391,8 +402,8 @@ import com.attendace.repository.AttendanceRepository;
             }
 
 
-    // curl -X DELETE http://localhost:8080/api/deleteAttendance/2025-02-01/CS101/
-    @DeleteMapping("/deleteAttendance/{date}/{courseCode}/{emplid}")
+    // curl -X DELETE http://localhost:8080/api/deleteAttendanceDateCCID/2025-02-01/CS101/123456
+    @DeleteMapping("/deleteAttendanceDateCCID/{date}/{courseCode}/{emplid}")
         public ResponseEntity<Void> deleteAttendanceBySessionAndStudent(
             @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
             @PathVariable String courseCode,
@@ -409,8 +420,8 @@ import com.attendace.repository.AttendanceRepository;
             }
 
 
-    // curl -X DELETE http://localhost:8080/api/deleteAttendance/CS101
-    @DeleteMapping("/deleteAttendance/{courseCode}")
+    // curl -X DELETE http://localhost:8080/api/deleteAttendanceCC/CS101
+    @DeleteMapping("/deleteAttendanceCC/{courseCode}")
         public ResponseEntity<Void> deleteAttendanceByCourse(@PathVariable String courseCode) {
             Course course = courseRepository.findByCourseCode(courseCode).orElse(null);
             if (course == null) {
@@ -421,8 +432,8 @@ import com.attendace.repository.AttendanceRepository;
         }
 
 
-    // curl -X DELETE http://localhost:8080/api/deleteAttendance/CS101/student/123456
-    @DeleteMapping("/deleteAttendance/{courseCode}/student/{emplid}")
+    // curl -X DELETE http://localhost:8080/api/deleteAttendanceCCID/CS101/123456
+    @DeleteMapping("/deleteAttendanceCCID/{courseCode}/{emplid}")
         public ResponseEntity<Void> deleteAttendanceByCourseAndStudent(
             @PathVariable String courseCode,
             @PathVariable Integer emplid) {

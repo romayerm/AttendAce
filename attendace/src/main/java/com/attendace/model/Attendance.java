@@ -54,8 +54,8 @@ public class Attendance {
     public Student getStudent() { return student; }
     public void setStudent(Student student) { this.student = student; }
 
-    public AttendanceStatus getAStatus() { return status; }
-    public void setAStatus(AttendanceStatus status) { this.status = status; }
+    public AttendanceStatus getStatus() { return status; }
+    public void setStatus(AttendanceStatus status) { this.status = status; }
 
         @Override
     public boolean equals(Object o) {

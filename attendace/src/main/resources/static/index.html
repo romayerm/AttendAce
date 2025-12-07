@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AttendAce</title>
+  <link rel="stylesheet" href="styles.css">
+  <!--<link rel="manifest" href="manifest.json"> -->
+</head>
+
+<!-- Main Menu / Welcome Page -->
+<section id="Menu" class="page active">
+  <h1>Welcome!</h1>
+  <p>What would you like to do today?</p>
+  <nav id="navMenu">
+    <button id="navTakeAttendance" class="navBtn">Take Attendance</button>
+    <button id="navAddCourse" class="navBtn">Add Course</button>
+    <button id="navAddStudent" class="navBtn">Add Student</button>
+    <button id="navNewSemester" class="navBtn">New Semester</button>
+    <button id="navGenerateReport" class="navBtn">Generate Report</button>
+  </nav>
+</section>
+
+<!-- "Take Attendace" selected > Choose Course -->
+<section id="TakeAttendanceCourseSelect" class="page">
+    <h2>Select a course to take attendance:</h2>
+    <div id="CoursesButtons"></div>
+    <p id="NoCourses" style="display: none;">
+    No courses available. Please add a course first.
+    </p>
+    <button id="navAddCourse" class="navBtn">Add Course</button>
+    <button id="menuBtn" class="navBtn">Back</button>
+</section>
+
+<!-- Course selected > Take attendance -->
+<section id="TakeAttendance" class="page">
+
+  <button id="navTakeAttendance" class="navBtn">Back</button>
+</section>
+
+<section id="AddCourse" class="page">
+
+  <button id="menuBtn" class="navBtn">Back</button>
+</section>
+
+<section id="AddStudent" class="page">
+
+  <button id="menuBtn" class="navBtn">Back</button>
+</section>
+
+<section id="NewSemester" class="page"> 
+
+  <button id="menuBtn" class="navBtn">Back</button>
+</section>
+
+<script src="script.js"></script>
+
+<!-- Logo that links back to Main Menu -->
+<img id="logoBtn" src="logo.png" alt="AttendAce Logo" class="logo-fixed">
+
+</body>
+</html>

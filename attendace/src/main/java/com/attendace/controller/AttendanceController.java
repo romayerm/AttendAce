@@ -116,7 +116,13 @@ import com.attendace.repository.AttendanceRepository;
       }'
     */
     @PostMapping("/createStudent")
-    public ResponseEntity<Student> createStudent(@RequestBody Student student) {
+    public ResponseEntity<?> createStudent(@RequestBody Student student) {
+        Optional<Student> existing = studentRepository.findByEmplid(student.getEmplid());
+        if (existing.isPresent()) {
+            return ResponseEntity
+                .badRequest()
+                .body("Student with this EMPLID already exists.");
+        }
         Student saved = studentRepository.save(student);
         return ResponseEntity.ok(saved);
     }
@@ -259,9 +265,16 @@ import com.attendace.repository.AttendanceRepository;
         }'
     */
     @PostMapping("/createCourse")
-        public Course createCourse(@RequestBody Course course) {
-            return courseRepository.save(course);
+    public ResponseEntity<?> createCourse(@RequestBody Course course) {
+        Optional<Course> existing = courseRepository.findByCourseCode(course.getCourseCode());
+        if (existing.isPresent()) {
+            return ResponseEntity
+                .badRequest()
+                .body("Course with this course code already exists.");
         }
+        Course saved = courseRepository.save(course);
+        return ResponseEntity.ok(saved);
+    }
 
 
     /*  http://localhost:8080/api/enrollStudents/1

@@ -73,7 +73,6 @@ async function saveStudentFromForm() {
   return { savedStudent, studentEmplidInput, studentFNameInput, studentLNameInput, studentEmailInput };
 }
 
-
 // deleteAll API functions
 async function deleteAllAttendanceApi() {
   const res = await fetch(`${API_BASE}/deleteAttendances`, {
@@ -150,17 +149,55 @@ async function enrollStudentsInCourseApi(courseId, studentIds) {
   return res.json();
 }
 
+// get students by course
+async function getStudentsByCourseCodeApi(courseCode) {
+  const res = await fetch(`${API_BASE}/getStudentsByCC/${courseCode}`, {
+    method: "GET"
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(text || "Failed to fetch students for course");
+  }
+  return res.json(); // array of Student
+}
+
+// create session
+async function createSessionApi(sessionDate, courseCode) {
+  const res = await fetch(`${API_BASE}/createSession`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      sessionDate,            // "2025-12-07"
+      courseCode              // e.g. "CISC3810"
+    })
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(text || "Failed to create session");
+  }
+  return res.json(); // Session
+}
+
+// create attendance instance
+async function createAttendanceApi(sessionDate, courseCode, emplid, status) {
+  const res = await fetch(`${API_BASE}/createAttendance`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      sessionDate,
+      courseCode,
+      emplid,
+      status                  // "PRESENT" or "ABSENT"
+    })
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(text || "Failed to create attendance");
+  }
+  return res.json();
+}
+
 // API HELPERS END
-
-
-
-
-
-
-
-
-
-//
 
 function showPage(pageId) {
   const pages = document.querySelectorAll('.page');
@@ -212,7 +249,7 @@ async function setupTakeAttendanceCourseSelect() {
       btn.className = 'navBtn';
       btn.textContent = course.courseCode; // label with course code
       btn.addEventListener('click', () => {
-        showPage('TakeAttendance');
+        openAttendanceForCourse(course);
       });
       coursesContainer.appendChild(btn);
     });
@@ -221,6 +258,43 @@ async function setupTakeAttendanceCourseSelect() {
     coursesContainer.innerHTML = "";
     noCoursesMsg.textContent = "Error loading courses. Please try again.";
     noCoursesMsg.style.display = "block";
+  }
+}
+
+// Take Attendance page
+async function openAttendanceForCourse(course) {
+  window.currentCourseForAttendance = course;
+  showPage('TakeAttendance');
+  const header = document.getElementById('attendanceCourseHeader');
+  const listContainer = document.getElementById('AttendanceStudentsList');
+  const dateInput = document.getElementById('attendanceDateInput');
+  header.textContent = `${course.courseCode} — ${course.courseName}`;
+  dateInput.valueAsNumber = Date.now(); // default to today
+  listContainer.innerHTML = "Loading students...";
+  try {
+    const students = await getStudentsByCourseCodeApi(course.courseCode);
+    if (!students || students.length === 0) {
+      listContainer.innerHTML = "No students enrolled in this course.";
+      return;
+    }
+    listContainer.innerHTML = "";
+    window.currentAttendanceStudents = students;
+    students.forEach(stu => {
+      const row = document.createElement('div');
+      row.className = 'attendance-row';
+      const nameSpan = document.createElement('span');
+      nameSpan.textContent = `${stu.studentFName} ${stu.studentLName}`;
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.checked = false;     // default: absent
+      checkbox.dataset.emplid = stu.emplid;
+      row.appendChild(nameSpan);
+      row.appendChild(checkbox);
+      listContainer.appendChild(row);
+    });
+  } catch (err) {
+    console.error(err);
+    listContainer.innerHTML = "Error loading students.";
   }
 }
 
@@ -321,6 +395,10 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.backToAddStudent').forEach(btn => {
     btn.addEventListener('click', () => showPage('AddStudent'));
   });
+  // back button on Take Attendance takes you back to Course Selection
+  document.querySelectorAll('.backToCourseSelect').forEach(btn => {
+    btn.addEventListener('click', () => showPage('TakeAttendanceCourseSelect'));
+  });
 
   // "Add Course" button on Course Selection page takes you to Add Course page
   document.querySelectorAll('#navAddCourse').forEach(btn => { 
@@ -341,29 +419,48 @@ document.addEventListener('DOMContentLoaded', () => {
     showPage('Menu');
   });
 
-  // Add Course: Save to backend
-  const saveCourseBtn = document.getElementById('saveCourseBtn');
-  const courseCodeInput = document.getElementById('courseCodeInput');
-  const courseNameInput = document.getElementById('courseNameInput');
- /* saveCourseBtn.addEventListener('click', async () => {
-    const courseCode = courseCodeInput.value.trim();
-    const courseName = courseNameInput.value.trim();
-    if (!courseCode || !courseName) {
-      showToast("Please enter both course code and course name.");
+  // Take Attendance logics
+  const saveAttendanceBtn = document.getElementById('saveAttendanceBtn');
+  saveAttendanceBtn.addEventListener('click', async () => {
+    const course = window.currentCourseForAttendance;
+    if (!course) {
+      showToast("No course selected.");
+      return;
+    }
+    const dateInput = document.getElementById('attendanceDateInput');
+    const sessionDate = dateInput.value; // "YYYY-MM-DD"
+    if (!sessionDate) {
+      showToast("Please select today's date.");
+      return;
+    }
+    const checkboxes = document.querySelectorAll('#AttendanceStudentsList input[type="checkbox"]');
+    if (checkboxes.length === 0) {
+      showToast("No students to take attendance for.");
       return;
     }
     try {
-      await createCourseApi(courseCode, courseName);
-      showToast("Course saved!");
-      courseCodeInput.value = "";
-      courseNameInput.value = "";
+      await createSessionApi(sessionDate, course.courseCode);   //create session
+      const promises = Array.from(checkboxes).map(cb => {   //create attendance per student
+        const emplid = parseInt(cb.dataset.emplid, 10);
+        const status = cb.checked ? "PRESENT" : "ABSENT";
+        return createAttendanceApi(sessionDate, course.courseCode, emplid, status);
+      });
+      await Promise.all(promises);
+      showToast("Attendance saved!");
+      showPage('Menu');
     } catch (err) {
       console.error(err);
+      showToast("Error saving attendance. See console.");
     }
-  }); */
+  });
 
-  // Add Course: Save & Enroll students
+  // Add Course:
+  const saveCourseBtn = document.getElementById('saveCourseBtn');
   const enrollStudentsBtn = document.getElementById('enrollStudentsBtn');
+  const courseCodeInput = document.getElementById('courseCodeInput');
+  const courseNameInput = document.getElementById('courseNameInput');
+
+  // create course only
   saveCourseBtn.addEventListener('click', async () => {
     try {
       const result = await saveCourseFromForm();
@@ -376,17 +473,52 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error(err);
     }
   });
+
+  // go to Enroll Students, don't save yet
   enrollStudentsBtn.addEventListener('click', async () => {
+    const courseCode = courseCodeInput.value.trim();
+    const courseName = courseNameInput.value.trim();
+    if (!courseCode || !courseName) {
+      showToast("Please enter both course code and course name.");
+      return;
+    }
+    window.pendingCourseData = { courseCode, courseName }; // store unsaved course data
+    window.currentCourseForEnrollment = { // fake course object for the label on next page
+      courseCode,
+      courseName,
+      courseId: null
+    };
+    await showEnrollStudentsPage(window.currentCourseForEnrollment);
+  });
+
+  // Enroll Students page: Save enrollment
+  const saveEnrollmentBtn = document.getElementById('saveEnrollmentBtn');
+  saveEnrollmentBtn.addEventListener('click', async () => {
+    let course = window.currentCourseForEnrollment;
+    if (!course) {
+      showToast("No course selected for enrollment.");
+      return;
+    }
+    const checkboxes = document.querySelectorAll('#EnrollStudentsList input[type="checkbox"]');
+    const studentIds = Array.from(checkboxes)
+      .filter(cb => cb.checked)
+      .map(cb => parseInt(cb.dataset.studentId, 10));
+    if (studentIds.length === 0) {
+      showToast("Please select at least one student.");
+      return;
+    }
     try {
-      const result = await saveCourseFromForm();
-      if (!result) return;
-      const { savedCourse } = result;
-      // remember which course we're enrolling into
-      window.currentCourseForEnrollment = savedCourse;
-      // go to enroll students page
-      await showEnrollStudentsPage(savedCourse);
+      if (!course.courseId) {
+        const data = window.pendingCourseData;
+        course = await createCourseApi(data.courseCode, data.courseName);
+        window.currentCourseForEnrollment = course;
+      }
+      await enrollStudentsInCourseApi(course.courseId, studentIds);
+      showToast("Course created and students enrolled!");
+      showPage('Menu');
     } catch (err) {
       console.error(err);
+      showToast("Error enrolling students. See console.");
     }
   });
 
@@ -396,7 +528,31 @@ document.addEventListener('DOMContentLoaded', () => {
   const studentFNameInput = document.getElementById('studentFNameInput');
   const studentLNameInput = document.getElementById('studentLNameInput');
   const studentEmailInput = document.getElementById('studentEmailInput');
-  /* saveStudentBtn.addEventListener('click', async () => {
+  const enrollIntoBtn = document.getElementById('enrollIntoBtn');
+
+  // create student only
+  saveStudentBtn.addEventListener('click', async () => {
+    try {
+      const result = await saveStudentFromForm();
+      if (!result) return;
+      const {
+        studentEmplidInput,
+        studentFNameInput,
+        studentLNameInput,
+        studentEmailInput
+      } = result;
+      showToast("Student saved!");
+      studentEmplidInput.value = "";
+      studentFNameInput.value = "";
+      studentLNameInput.value = "";
+      studentEmailInput.value = "";
+    } catch (err) {
+      console.error(err);
+    }
+  }); 
+
+  // go to Enroll Into, do NOT save yet
+  enrollIntoBtn.addEventListener('click', async () => {
     const emplid = studentEmplidInput.value.trim();
     const fName = studentFNameInput.value.trim();
     const lName = studentLNameInput.value.trim();
@@ -405,86 +561,26 @@ document.addEventListener('DOMContentLoaded', () => {
       showToast("Please fill in all fields.");
       return;
     }
-    const studentData = {
-      emplid: parseInt(emplid),
+    window.pendingStudentData = { // store unsaved student data
+      emplid: parseInt(emplid, 10),
       studentFName: fName,
       studentLName: lName,
       studentEmail: email
     };
-    try {
-      await createStudentApi(studentData);
-      showToast("Student saved!");
-      studentEmplidInput.value = "";
-      studentFNameInput.value = "";
-      studentLNameInput.value = "";
-      studentEmailInput.value = "";
-    } catch (err) {
-      console.error(err);
-    }
-  }); */
-
-  // Enroll Students page: Save enrollment
-  const saveEnrollmentBtn = document.getElementById('saveEnrollmentBtn');
-  saveEnrollmentBtn.addEventListener('click', async () => {
-    const course = window.currentCourseForEnrollment;
-    if (!course) {
-      showToast("No course selected for enrollment.");
-      return;
-    }
-    const checkboxes = document.querySelectorAll(
-      '#EnrollStudentsList input[type="checkbox"]'
-    );
-    const studentIds = Array.from(checkboxes)
-      .filter(cb => cb.checked)
-      .map(cb => parseInt(cb.dataset.studentId, 10));
-    if (studentIds.length === 0) {
-      showToast("Please select at least one student.");
-      return;
-    }
-    try {
-      await enrollStudentsInCourseApi(course.courseId, studentIds);
-      showToast("Students enrolled into course!");
-      showPage('Menu');
-    } catch (err) {
-      console.error(err);
-      showToast("Error enrolling students. See console.");
-    }
+    window.currentStudentForEnrollment = { // fake student object for label on next page
+      emplid: parseInt(emplid, 10),
+      studentFName: fName,
+      studentLName: lName,
+      studentEmail: email,
+      studentId: null
+    };
+    await showEnrollIntoPage(window.currentStudentForEnrollment);
   });
 
-
-  // Add Student: Save + Enroll Into 
-  const enrollIntoBtn = document.getElementById('enrollIntoBtn');
-  saveStudentBtn.addEventListener('click', async () => {
-    try {
-      const result = await saveStudentFromForm();
-      if (!result) return;
-      const { studentEmplidInput, studentFNameInput, studentLNameInput, studentEmailInput } = result;
-      showToast("Student saved!");
-      studentEmplidInput.value = "";
-      studentFNameInput.value = "";
-      studentLNameInput.value = "";
-      studentEmailInput.value = "";
-    } catch (err) {
-      console.error(err);
-    }
-  });
-  enrollIntoBtn.addEventListener('click', async () => {
-    try {
-      const result = await saveStudentFromForm();
-      if (!result) return;
-      const { savedStudent } = result;
-      // remember which student we're enrolling
-      window.currentStudentForEnrollment = savedStudent;
-      await showEnrollIntoPage(savedStudent);
-    } catch (err) {
-      console.error(err);
-    }
-  });
-
-  // Save enroll-into selection 
+  // Save enroll into selection 
   const saveStudentEnrollBtn = document.getElementById('saveStudentEnrollBtn');
   saveStudentEnrollBtn.addEventListener('click', async () => {
-    const student = window.currentStudentForEnrollment;
+    let student = window.currentStudentForEnrollment;
     if (!student) {
       showToast("No student selected for enrollment.");
       return;
@@ -498,19 +594,29 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     try {
-      // reuse the same enroll endpoint, one call per course
+      if (!student.studentId) {
+        const data = window.pendingStudentData;
+        student = await createStudentApi(data);
+        window.currentStudentForEnrollment = student;
+      }
       const promises = courseIds.map(courseId =>
         enrollStudentsInCourseApi(courseId, [student.studentId])
       );
       await Promise.all(promises);
-
-      showToast("Student enrolled into selected courses!");
+      showToast("Student created and enrolled into selected courses!");
       showPage('Menu');
     } catch (err) {
       console.error(err);
       showToast("Error enrolling student. See console.");
     }
   });
+
+
+
+
+
+
+
 
 
   // New Semester: Delete everything

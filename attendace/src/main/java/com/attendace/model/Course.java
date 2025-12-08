@@ -15,7 +15,7 @@ public class Course {
     @Column(unique = true, nullable = false)
     private String courseCode;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String courseName;
 
     @ManyToMany(mappedBy = "courses")

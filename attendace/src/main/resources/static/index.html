@@ -32,10 +32,8 @@
       <div class="formContainer">
         <label for="courseCodeInput">Course Code</label>
         <input type="text" id="courseCodeInput" placeholder="e.g. CS101">
-
         <label for="courseNameInput">Course Name</label>
         <input type="text" id="courseNameInput" placeholder="e.g. Intro to CS">
-
         <button id="saveCourseBtn" class="navBtn">Save</button>
         <button id="enrollStudentsBtn" class="navBtn">Enroll students</button>
         <button class="menuBtn navBtn">Back</button>
@@ -47,7 +45,6 @@
       <h2>Enroll Students</h2>
       <p id="enrollCourseLabel"></p>
       <div id="EnrollStudentsList"></div>
-      <button id="saveEnrollmentBtn" class="navBtn">Save</button>
       <div class="formContainer">
         <button id="saveEnrollmentBtn" class="navBtn">Save</button>
         <button class="backToAddCourse navBtn">Back</button>
@@ -60,16 +57,12 @@
       <div class="formContainer">
         <label for="studentEmplidInput">EMPLID</label>
         <input type="number" id="studentEmplidInput" placeholder="e.g. 12345678">
-
         <label for="studentFNameInput">First Name</label>
         <input type="text" id="studentFNameInput" placeholder="e.g. Alex">
-
         <label for="studentLNameInput">Last Name</label>
         <input type="text" id="studentLNameInput" placeholder="e.g. Johnson">
-
         <label for="studentEmailInput">Email</label>
         <input type="email" id="studentEmailInput" placeholder="e.g. alex@student.edu">
-
         <button id="saveStudentBtn" class="navBtn">Save</button>
         <button id="enrollIntoBtn" class="navBtn">Enroll Into</button>
         <button class="menuBtn navBtn">Back</button>
@@ -112,6 +105,24 @@
           <button id="navAddCourse" class="navBtn">Add Course</button>
           <button class="menuBtn navBtn">Back</button>
         </div>
+    </section>
+
+    <!-- Course Chosen > Take Attendance Page -->
+    <section id="TakeAttendance" class="page">
+      <h2 id="attendanceCourseHeader">Course – Attendance</h2>
+      <div class="formContainer">
+        <label for="attendanceDateInput">Today's date:</label>
+        <input type="date" id="attendanceDateInput">
+      </div>
+      <div class="attendance-header-row">
+        <span>Name</span>
+        <span>Present?</span>
+      </div>
+      <div id="AttendanceStudentsList"></div>
+      <div class="formContainer">
+        <button id="saveAttendanceBtn" class="navBtn">Save</button>
+        <button class="backToCourseSelect navBtn">Back</button>
+      </div>
     </section>
 
     <!-- Course selected > Take attendance -->

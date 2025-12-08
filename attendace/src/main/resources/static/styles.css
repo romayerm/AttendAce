@@ -31,6 +31,27 @@ body {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
+.toast {
+  position: fixed;          
+  left: 50%;                
+  top: 10%;                  
+  transform: translateX(-50%);
+  padding: 0.6rem 1.2rem;
+  background: #333;
+  color: #fff;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 2000;
+}
+
+.toast.show {
+  opacity: 1;
+}
+
 .logo-fixed {
   position: fixed;
   bottom: 20px;
@@ -70,13 +91,22 @@ p {
   margin-bottom: 1rem;
 }
 
-#EnrollIntoCourseList,
-#EnrollStudentsList {
+#EnrollIntoCourseList {
+  width: 100%;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.course-row {
   width: 100%;
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin: 1rem 0;
+  justify-content: space-between; /* text left, checkbox right */
+  align-items: center;
+  padding: 0.25rem 0;
+}
+
+.course-row span {
+  font-size: 0.95rem;
 }
 
 .student-row {
@@ -118,6 +148,32 @@ p {
 .navBtn:active {
   transform: translateY(1px);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.attendance-header-row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  margin-top: 1rem;
+}
+
+#AttendanceStudentsList {
+  width: 100%;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.attendance-row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.25rem 0;
+}
+
+.attendance-row span {
+  font-size: 0.95rem;
 }
 
 /* "No courses" message */

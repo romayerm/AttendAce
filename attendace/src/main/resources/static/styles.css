@@ -70,6 +70,31 @@ p {
   margin-bottom: 1rem;
 }
 
+#EnrollIntoCourseList,
+#EnrollStudentsList {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.student-row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95rem;
+}
+
+.formContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;     /* same spacing as menu buttons */
+  margin-top: 1rem;
+}
+
 .navBtn {
   width: 100%;
   padding: 0.75rem 1rem;

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +36,7 @@ import com.attendace.repository.AttendanceRepository;
 
     @RestController
     @RequestMapping("/api")
+    @CrossOrigin(origins = "*")
     public class AttendanceController {
 
     @Autowired
@@ -259,6 +261,28 @@ import com.attendace.repository.AttendanceRepository;
     @PostMapping("/createCourse")
         public Course createCourse(@RequestBody Course course) {
             return courseRepository.save(course);
+        }
+
+
+    /*  http://localhost:8080/api/enrollStudents/1
+        {
+            "studentIds": [1, 2, 3]
+        }
+    */
+    @PostMapping("/enrollStudents/{courseId}")
+        public ResponseEntity<Course> enrollStudentsInCourse(
+            @PathVariable Integer courseId,
+            @RequestBody EnrollmentRequest request) {
+            Course course = courseRepository.findById(courseId).orElse(null);
+            if (course == null) return ResponseEntity.notFound().build();
+            List<Student> students = studentRepository.findAllById(request.getStudentIds());
+            for (Student student : students) {
+                if (!student.getCourses().contains(course)) {
+                    student.getCourses().add(course);
+                }
+            }
+            studentRepository.saveAll(students);
+            return ResponseEntity.ok(course);
         }
 
 

@@ -57,6 +57,10 @@ public class Student {
 
     public String getStudentEmail() { return studentEmail; }
     public void setStudentEmail(String studentEmail) { this.studentEmail = studentEmail; }
+    
+    public List<Course> getCourses() { return courses; }
+
+    public void setCourses(List<Course> courses) { this.courses = courses; }
 
     @Override
     public boolean equals(Object o) {

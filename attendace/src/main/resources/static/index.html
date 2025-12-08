@@ -1,62 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AttendAce</title>
-  <link rel="stylesheet" href="styles.css">
-  <!--<link rel="manifest" href="manifest.json"> -->
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>AttendAce</title>
+    <link rel="stylesheet" href="styles.css">
+    <!--<link rel="manifest" href="manifest.json"> -->
+  </head>
 
-<!-- Main Menu / Welcome Page -->
-<section id="Menu" class="page active">
-  <h1>Welcome!</h1>
-  <p>What would you like to do today?</p>
-  <nav id="navMenu">
-    <button id="navTakeAttendance" class="navBtn">Take Attendance</button>
-    <button id="navAddCourse" class="navBtn">Add Course</button>
-    <button id="navAddStudent" class="navBtn">Add Student</button>
-    <button id="navNewSemester" class="navBtn">New Semester</button>
-    <button id="navGenerateReport" class="navBtn">Generate Report</button>
-  </nav>
-</section>
+  <body>
 
-<!-- "Take Attendace" selected > Choose Course -->
-<section id="TakeAttendanceCourseSelect" class="page">
-    <h2>Select a course to take attendance:</h2>
-    <div id="CoursesButtons"></div>
-    <p id="NoCourses" style="display: none;">
-    No courses available. Please add a course first.
-    </p>
-    <button id="navAddCourse" class="navBtn">Add Course</button>
-    <button id="menuBtn" class="navBtn">Back</button>
-</section>
+    <!-- Logo that links back to Main Menu -->
+    <img id="logoBtn" src="logo.png" alt="AttendAce Logo" class="logo-fixed">
 
-<!-- Course selected > Take attendance -->
-<section id="TakeAttendance" class="page">
+    <!-- Main Menu / Welcome Page -->
+    <section id="Menu" class="page active">
+      <h1>Welcome!</h1>
+      <p>What would you like to do today?</p>
+      <nav id="navMenu">
+        <button id="navTakeAttendance" class="navBtn">Take Attendance</button>
+        <button id="navAddCourse" class="navBtn">Add Course</button>
+        <button id="navAddStudent" class="navBtn">Add Student</button>
+        <button id="navNewSemester" class="navBtn">New Semester</button>
+        <button id="navGenerateReport" class="navBtn">Generate Report</button>
+      </nav>
+    </section>
 
-  <button id="navTakeAttendance" class="navBtn">Back</button>
-</section>
+    <!-- Add Course Selected -->
+    <section id="AddCourse" class="page">
+      <h2>Add Course</h2>
+      <div class="formContainer">
+        <label for="courseCodeInput">Course Code</label>
+        <input type="text" id="courseCodeInput" placeholder="e.g. CS101">
 
-<section id="AddCourse" class="page">
+        <label for="courseNameInput">Course Name</label>
+        <input type="text" id="courseNameInput" placeholder="e.g. Intro to CS">
 
-  <button id="menuBtn" class="navBtn">Back</button>
-</section>
+        <button id="saveCourseBtn" class="navBtn">Save</button>
+        <button id="enrollStudentsBtn" class="navBtn">Enroll students</button>
+        <button class="menuBtn navBtn">Back</button>
+      </div>
+    </section>
 
-<section id="AddStudent" class="page">
+    <!-- Enroll Students Selected -->
+    <section id="EnrollStudents" class="page">
+      <h2>Enroll Students</h2>
+      <p id="enrollCourseLabel"></p>
+      <div id="EnrollStudentsList"></div>
+      <button id="saveEnrollmentBtn" class="navBtn">Save</button>
+      <div class="formContainer">
+        <button id="saveEnrollmentBtn" class="navBtn">Save</button>
+        <button class="backToAddCourse navBtn">Back</button>
+      </div>
+    </section>
 
-  <button id="menuBtn" class="navBtn">Back</button>
-</section>
+    <!-- Add Student Selected -->
+    <section id="AddStudent" class="page">
+      <h2>Add Student</h2>
+      <div class="formContainer">
+        <label for="studentEmplidInput">EMPLID</label>
+        <input type="number" id="studentEmplidInput" placeholder="e.g. 12345678">
 
-<section id="NewSemester" class="page"> 
+        <label for="studentFNameInput">First Name</label>
+        <input type="text" id="studentFNameInput" placeholder="e.g. Alex">
 
-  <button id="menuBtn" class="navBtn">Back</button>
-</section>
+        <label for="studentLNameInput">Last Name</label>
+        <input type="text" id="studentLNameInput" placeholder="e.g. Johnson">
 
-<script src="script.js"></script>
+        <label for="studentEmailInput">Email</label>
+        <input type="email" id="studentEmailInput" placeholder="e.g. alex@student.edu">
 
-<!-- Logo that links back to Main Menu -->
-<img id="logoBtn" src="logo.png" alt="AttendAce Logo" class="logo-fixed">
+        <button id="saveStudentBtn" class="navBtn">Save</button>
+        <button id="enrollIntoBtn" class="navBtn">Enroll Into</button>
+        <button class="menuBtn navBtn">Back</button>
+      </div>
+    </section>
 
-</body>
+    <!-- Enroll Into Selected -->
+    <section id="EnrollInto" class="page">
+      <h2>Enroll Into Courses</h2>
+      <p id="enrollIntoStudentLabel"></p>
+      <div id="EnrollIntoCourseList"></div>
+      <div class="formContainer">
+        <button id="saveStudentEnrollBtn" class="navBtn">Save</button>
+        <button class="backToAddStudent navBtn">Back</button>
+      </div>
+    </section>
+
+    <!-- New Semester Selected -->
+    <section id="NewSemester" class="page">
+      <h2>New Semester</h2>
+      <p>
+        This will permanently delete records of all students, all courses, and all attendance data.
+        <br><br>
+        Are you sure you want to proceed?
+      </p>
+      <div class="formContainer">
+        <button id="deleteEverythingBtn" class="navBtn">Delete everything</button>
+        <button class="menuBtn navBtn">Back</button>
+      </div>
+    </section>
+
+    <!-- "Take Attendace" selected > Choose Course -->
+    <section id="TakeAttendanceCourseSelect" class="page">
+        <h2>Select a course to take attendance:</h2>
+        <div id="CoursesButtons"></div>
+        <p id="NoCourses" style="display: none;">
+        No courses available. Please add a course first.
+        </p>
+        <div class="formContainer">
+          <button id="navAddCourse" class="navBtn">Add Course</button>
+          <button class="menuBtn navBtn">Back</button>
+        </div>
+    </section>
+
+    <!-- Course selected > Take attendance -->
+    <section id="TakeAttendance" class="page">
+
+      <button id="navTakeAttendance" class="navBtn">Back</button>
+    </section>
+
+    <script src="script.js"></script>
+
+  </body>
 </html>
